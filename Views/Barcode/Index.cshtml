@@ -1,0 +1,37 @@
+@{
+    ViewData["Title"] = "Generador de Codis de Barres";
+}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"]</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-6 rounded-lg shadow-lg text-center">
+        <h1 class="text-2xl font-bold mb-4">Generador de Codis de Barres EAN-13</h1>
+        <img id="barcodeImage" src="" class="mx-auto mb-4 border p-2 bg-gray-200">
+        <p class="text-lg font-mono" id="barcodeText">...</p>
+        <button onclick="generateBarcode()" class="mt-4 bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">Generar Nou Codi</button>
+        <a id="downloadLink" class="mt-2 block text-blue-500 hover:underline">Descarregar</a>
+    </div>
+
+    <script>
+        function generateBarcode() {
+            fetch('/Barcode/GenerateBarcode')
+                .then(response => response.json())
+                .then(data => {
+                    document.getElementById('barcodeImage').src = data.image;
+                    document.getElementById('barcodeText').innerText = data.code;
+                    document.getElementById('downloadLink').href = '/Barcode/DownloadBarcode?code=' + data.code;
+                    document.getElementById('downloadLink').innerText = 'Descarregar Codi';
+                });
+        }
+        window.onload = generateBarcode;
+    </script>
+</body>
+</html>
